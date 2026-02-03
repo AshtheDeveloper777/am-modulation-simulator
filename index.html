@@ -3,132 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AM Modulation Simulator</title>
+<title>AM Modulation Simulator – Pro Animation</title>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <style>
 :root {
-    --glass: rgba(255,255,255,0.12);
-    --border: rgba(255,255,255,0.25);
+    --glass: rgba(255,255,255,0.1);
+    --border: rgba(255,255,255,0.3);
     --neon: #00f7ff;
+    --accent: #00f7ff;
 }
 
-* {
-    box-sizing: border-box;
-}
-
+/* GENERAL */
+* { box-sizing: border-box; }
 html, body {
-    width: 100%;
-    margin: 0;
-    overflow-x: hidden; /* CRITICAL FIX */
+    margin:0; width:100%; height:100%;
     font-family: 'Segoe UI', sans-serif;
     background: radial-gradient(circle at top, #0f2027, #020111);
-    color: white;
+    color:white; overflow-x:hidden;
+}
+
+/* ANIMATIONS */
+@keyframes fadeSlide {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+    0% { opacity:0; transform: scale(0.95); }
+    100% { opacity:1; transform: scale(1); }
 }
 
 /* HEADER */
 header {
-    padding: 16px;
-    text-align: center;
+    text-align:center;
+    padding:16px;
     font-size: clamp(20px, 3vw, 28px);
-    font-weight: bold;
-    text-shadow: 0 0 12px var(--neon);
+    font-weight:bold;
+    text-shadow: 0 0 15px var(--neon);
+    animation: fadeSlide 0.8s ease-out;
 }
 
 /* DASHBOARD */
 .dashboard {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 16px;
-    padding: 16px;
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:16px;
+    padding:16px;
 }
 
 /* PANEL */
 .panel {
     background: var(--glass);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 16px;
+    border:1px solid var(--border);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 20px rgba(0,255,255,0.1);
+    animation: fadeSlide 1s ease forwards;
 }
 
+/* PANEL H2 */
 .panel h2 {
-    text-align: center;
+    text-align:center;
+    margin-bottom:16px;
     color: var(--neon);
-    margin-bottom: 14px;
+    text-shadow: 0 0 6px var(--neon);
 }
 
 /* METERS */
 .meter {
-    background: rgba(0,0,0,0.45);
+    background: rgba(0,0,0,0.4);
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 12px;
-    text-align: center;
+    text-align:center;
+    box-shadow: inset 0 0 10px black;
+    animation: fadeSlide 1s ease forwards;
 }
-
 .meter span {
-    font-size: 22px;
-    color: var(--neon);
-    font-weight: bold;
+    font-size:22px;
+    color: var(--accent);
+    font-weight:bold;
+    transition: all 0.3s ease;
 }
 
 /* SLIDERS */
 input[type=range] {
-    width: 100%;
-    margin-bottom: 12px;
+    width:100%;
+    margin:10px 0;
     accent-color: var(--neon);
+    cursor:pointer;
+    transition: all 0.2s ease;
+    animation: fadeSlide 1s ease forwards;
 }
 
 /* BUTTON */
 button {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: bold;
-    background: linear-gradient(135deg, #00f7ff, #0066ff);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+    width:100%;
+    padding:12px;
+    font-size:15px;
+    font-weight:bold;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:linear-gradient(135deg,#00f7ff,#0066ff);
+    box-shadow:0 0 15px var(--neon);
+    transition: all 0.3s ease;
+    animation: fadeSlide 1s ease forwards;
+}
+button:hover {
+    transform: scale(1.05);
+    box-shadow:0 0 30px var(--neon);
 }
 
 /* PLOTS */
 .plots {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
 }
-
 .plot {
-    width: 100%;
-    min-width: 0;          /* VERY IMPORTANT */
-    min-height: 260px;
+    width:100%;
+    min-width:0;
+    min-height:260px;
     background: var(--glass);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 8px;
+    border:1px solid var(--border);
+    backdrop-filter:blur(12px);
+    border-radius:18px;
+    padding:8px;
+    animation: fadeInScale 1s ease forwards;
 }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .plots {
-        grid-template-columns: 1fr;
-    }
+@media(max-width:1024px){
+    .dashboard{ grid-template-columns: 1fr; }
+    .plots{ grid-template-columns:1fr; }
 }
 </style>
 </head>
 
 <body>
 
-<header>📡 AM MODULATION & DEMODULATION SIMULATOR</header>
+<header>📡 PROFESSIONAL AM MODULATION SIMULATOR</header>
 
 <div class="dashboard">
 
@@ -157,53 +174,70 @@ button {
 </div>
 
 <script>
+// Slider DOM
 const fm = document.getElementById("fm");
 const fc = document.getElementById("fc");
 const ka = document.getElementById("ka");
 
-fm.oninput = () => fmVal.innerText = fm.value;
-fc.oninput = () => fcVal.innerText = fc.value;
-ka.oninput = () => kaVal.innerText = ka.value;
+// Smooth meter animation
+fm.oninput = () => animateMeter(fmVal, fm.value);
+fc.oninput = () => animateMeter(fcVal, fc.value);
+ka.oninput = () => animateMeter(kaVal, ka.value);
 
-const plotConfig = {
-    responsive: true,
-    displayModeBar: false
-};
+function animateMeter(el, target){
+    let current = parseFloat(el.innerText);
+    let step = (target - current)/5;
+    let i = 0;
+    const interval = setInterval(()=>{
+        current += step;
+        el.innerText = parseFloat(current).toFixed(2);
+        i++;
+        if(i>=5) clearInterval(interval);
+    },30);
+}
 
-function layout(title) {
+// Plotly config
+const plotConfig = {responsive:true, displayModeBar:false};
+function layout(title){
     return {
         title,
-        autosize: true,
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        font: { color: 'white' },
-        margin: { l: 40, r: 20, t: 40, b: 30 }
+        autosize:true,
+        paper_bgcolor:'rgba(0,0,0,0)',
+        plot_bgcolor:'rgba(0,0,0,0)',
+        font:{color:'white'},
+        margin:{l:40,r:20,t:40,b:30}
     };
 }
 
-function simulate() {
-    let fs = 2000;
-    let t=[], m=[], c=[], am=[], dm=[];
+// Simulation
+function simulate(){
+    const fs = 2000;
+    const t=[], m=[], c=[], am=[], dm=[];
+    const fmVal = parseFloat(fm.value);
+    const fcVal = parseFloat(fc.value);
+    const kaVal = parseFloat(ka.value);
 
-    for (let i = 0; i < fs; i++) {
-        let time = i / fs;
-        let msg = Math.sin(2 * Math.PI * fm.value * time);
-        let car = Math.cos(2 * Math.PI * fc.value * time);
-        let amSig = (1 + ka.value * msg) * car;
+    for(let i=0;i<fs;i++){
+        const time = i/fs;
+        const msg = Math.sin(2*Math.PI*fmVal*time);
+        const car = Math.cos(2*Math.PI*fcVal*time);
+        const amSig = (1 + kaVal*msg)*car;
 
         t.push(time);
         m.push(msg);
         c.push(car);
         am.push(amSig);
-        dm.push(Math.abs(1 + ka.value * msg));
+        dm.push(Math.abs(1 + kaVal*msg));
     }
 
-    Plotly.react("msg", [{x:t, y:m}], layout("Message Signal"), plotConfig);
-    Plotly.react("car", [{x:t, y:c}], layout("Carrier Signal"), plotConfig);
-    Plotly.react("am",  [{x:t, y:am}], layout("AM Signal"), plotConfig);
-    Plotly.react("dm",  [{x:t, y:dm}], layout("Demodulated Signal"), plotConfig);
+    // Animate plots
+    Plotly.react("msg", [{x:t,y:m}], layout("Message Signal"), plotConfig);
+    Plotly.react("car", [{x:t,y:c}], layout("Carrier Signal"), plotConfig);
+    Plotly.react("am",  [{x:t,y:am}], layout("AM Signal"), plotConfig);
+    Plotly.react("dm",  [{x:t,y:dm}], layout("Demodulated Signal"), plotConfig);
 }
 
+// Initial plot
 simulate();
 </script>
 
