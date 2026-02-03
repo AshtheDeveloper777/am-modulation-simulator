@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Professional AM Modulation Simulator</title>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+:root {
+    --glass: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.25);
+    --neon: #00f7ff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0f2027, #020111);
+    color: white;
+    overflow: hidden;
+}
+
+header {
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px var(--neon);
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    height: calc(100vh - 90px);
+    padding: 20px;
+    gap: 20px;
+}
+
+/* CONTROL PANEL */
+.panel {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.panel h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--neon);
+}
+
+/* METERS */
+.meter {
+    background: rgba(0,0,0,0.5);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 15px;
+    text-align: center;
+    box-shadow: inset 0 0 10px black;
+}
+
+.meter span {
+    font-size: 28px;
+    color: var(--neon);
+    font-weight: bold;
+}
+
+/* SLIDERS */
+label {
+    margin-top: 15px;
+    display: block;
+    font-size: 14px;
+}
+
+input[type=range] {
+    width: 100%;
+    accent-color: var(--neon);
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00f7ff, #0066ff);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 20px #00f7ff;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+/* PLOTS */
+.plots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+}
+
+.plot {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>📡 AM MODULATION & DEMODULATION SIMULATOR</header>
+
+<div class="dashboard">
+
+    <!-- CONTROL PANEL -->
+    <div class="panel">
+        <h2>RF CONTROL PANEL</h2>
+
+        <div class="meter">Message Frequency<br><span id="fmVal">5</span> Hz</div>
+        <input type="range" id="fm" min="1" max="10" value="5">
+
+        <div class="meter">Carrier Frequency<br><span id="fcVal">100</span> Hz</div>
+        <input type="range" id="fc" min="20" max="300" value="100">
+
+        <div class="meter">Modulation Index<br><span id="kaVal">0.7</span></div>
+        <input type="range" id="ka" min="0.1" max="1" step="0.1" value="0.7">
+
+        <button onclick="simulate()">▶ RUN SIMULATION</button>
+    </div>
+
+    <!-- PLOTS -->
+    <div class="plots">
+        <div class="plot" id="msg"></div>
+        <div class="plot" id="car"></div>
+        <div class="plot" id="am"></div>
+        <div class="plot" id="dm"></div>
+    </div>
+
+</div>
+
+<script>
+const fmSlider = document.getElementById("fm");
+const fcSlider = document.getElementById("fc");
+const kaSlider = document.getElementById("ka");
+
+fmSlider.oninput = () => fmVal.innerText = fmSlider.value;
+fcSlider.oninput = () => fcVal.innerText = fcSlider.value;
+kaSlider.oninput = () => kaVal.innerText = kaSlider.value;
+
+function simulate() {
+
+    let fm = Number(fmSlider.value);
+    let fc = Number(fcSlider.value);
+    let ka = Number(kaSlider.value);
+
+    let fs = 2000;
+    let Ac = 1;
+
+    let t=[], m=[], c=[], am=[], dm=[];
+
+    for (let i=0;i<fs;i++){
+        let time = i/fs;
+        let msg = Math.sin(2*Math.PI*fm*time);
+        let car = Math.cos(2*Math.PI*fc*time);
+        let amSig = Ac*(1+ka*msg)*car;
+
+        t.push(time);
+        m.push(msg);
+        c.push(car);
+        am.push(amSig);
+        dm.push(Math.abs(Ac*(1+ka*msg)));
+    }
+
+    let layout = title => ({
+        title,
+        paper_bgcolor:'rgba(0,0,0,0)',
+        plot_bgcolor:'rgba(0,0,0,0)',
+        font:{color:'white'}
+    });
+
+    Plotly.newPlot("msg",[ {x:t,y:m} ],layout("Message Signal"));
+    Plotly.newPlot("car",[ {x:t,y:c} ],layout("Carrier Signal"));
+    Plotly.newPlot("am", [ {x:t,y:am}],layout("AM Modulated Signal"));
+    Plotly.newPlot("dm", [ {x:t,y:dm}],layout("Demodulated Signal"));
+}
+
+simulate();
+</script>
+
+</body>
+</html>
