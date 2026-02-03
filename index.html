@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Professional AM Modulation Simulator</title>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -13,29 +14,34 @@
     --neon: #00f7ff;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: radial-gradient(circle at top, #0f2027, #020111);
     color: white;
-    overflow: hidden;
 }
 
+/* HEADER */
 header {
-    padding: 20px;
+    padding: clamp(14px, 3vw, 22px);
     text-align: center;
-    font-size: 30px;
+    font-size: clamp(20px, 3vw, 30px);
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-shadow: 0 0 15px var(--neon);
 }
 
+/* DASHBOARD */
 .dashboard {
     display: grid;
     grid-template-columns: 340px 1fr;
-    height: calc(100vh - 90px);
-    padding: 20px;
-    gap: 20px;
+    gap: clamp(12px, 2vw, 20px);
+    padding: clamp(10px, 2vw, 20px);
+    min-height: calc(100vh - 90px);
 }
 
 /* CONTROL PANEL */
@@ -44,7 +50,7 @@ header {
     border: 1px solid var(--border);
     backdrop-filter: blur(15px);
     border-radius: 20px;
-    padding: 20px;
+    padding: clamp(14px, 2vw, 20px);
 }
 
 .panel h2 {
@@ -64,15 +70,15 @@ header {
 }
 
 .meter span {
-    font-size: 28px;
+    font-size: clamp(22px, 3vw, 28px);
     color: var(--neon);
     font-weight: bold;
 }
 
 /* SLIDERS */
 label {
-    margin-top: 15px;
     display: block;
+    margin-top: 12px;
     font-size: 14px;
 }
 
@@ -84,7 +90,7 @@ input[type=range] {
 /* BUTTON */
 button {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 18px;
     padding: 14px;
     font-size: 16px;
     font-weight: bold;
@@ -102,9 +108,8 @@ button:hover {
 /* PLOTS */
 .plots {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(10px, 2vw, 15px);
 }
 
 .plot {
@@ -113,6 +118,26 @@ button:hover {
     backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 10px;
+}
+
+/* ===========================
+   RESPONSIVE FIX
+   =========================== */
+@media (max-width: 1024px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .plots {
+        grid-template-columns: 1fr;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 12px;
+    }
 }
 </style>
 </head>
@@ -182,11 +207,12 @@ function simulate() {
         dm.push(Math.abs(Ac*(1+ka*msg)));
     }
 
-    let layout = title => ({
+    const layout = title => ({
         title,
         paper_bgcolor:'rgba(0,0,0,0)',
         plot_bgcolor:'rgba(0,0,0,0)',
-        font:{color:'white'}
+        font:{color:'white'},
+        margin:{l:40,r:20,t:40,b:30}
     });
 
     Plotly.newPlot("msg",[ {x:t,y:m} ],layout("Message Signal"));
@@ -194,61 +220,6 @@ function simulate() {
     Plotly.newPlot("am", [ {x:t,y:am}],layout("AM Modulated Signal"));
     Plotly.newPlot("dm", [ {x:t,y:dm}],layout("Demodulated Signal"));
 }
-/* ===============================
-   RESPONSIVE DESIGN FIX
-   =============================== */
-
-@media (max-width: 1024px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-
-    .panel {
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        overflow: auto;
-    }
-
-    header {
-        font-size: 22px;
-        padding: 15px;
-    }
-
-    .dashboard {
-        padding: 10px;
-        gap: 12px;
-    }
-
-    .panel {
-        padding: 15px;
-        border-radius: 16px;
-    }
-
-    .plots {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-    }
-
-    .plot {
-        padding: 8px;
-        border-radius: 16px;
-    }
-
-    .meter span {
-        font-size: 22px;
-    }
-
-    button {
-        padding: 12px;
-        font-size: 15px;
-    }
-}
-
 
 simulate();
 </script>
