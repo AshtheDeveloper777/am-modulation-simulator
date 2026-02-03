@@ -194,6 +194,61 @@ function simulate() {
     Plotly.newPlot("am", [ {x:t,y:am}],layout("AM Modulated Signal"));
     Plotly.newPlot("dm", [ {x:t,y:dm}],layout("Demodulated Signal"));
 }
+/* ===============================
+   RESPONSIVE DESIGN FIX
+   =============================== */
+
+@media (max-width: 1024px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .panel {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+
+    header {
+        font-size: 22px;
+        padding: 15px;
+    }
+
+    .dashboard {
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .panel {
+        padding: 15px;
+        border-radius: 16px;
+    }
+
+    .plots {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .plot {
+        padding: 8px;
+        border-radius: 16px;
+    }
+
+    .meter span {
+        font-size: 22px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
 
 simulate();
 </script>
